@@ -21,11 +21,68 @@
  *
  */
  
- /* README:
-  * A "triplet" algorithm implementation.
-  * Takes in two sorted arrays, and produces
-  * the closest triplet (one element 
-  * contributed by each array).
-  */
 
 
+
+//Efficiently produces the closest triplet from 3 arrays
+
+void findClosest(int arr1[], int arr2[], int arr3[]){
+ 
+ //calculate size of each array
+ int len1 = sizeof(arr1)/sizeof(arr1[0]);
+ int len2 = sizeof(arr2)/sizeof(arr2[0]);
+ int len3 = sizeof(arr3)/sizeof(arr3[0]);
+ 
+ int i = 0; int j = 0; int k = 0; int res_i, res_j, res_k;
+ int diff = INT_MAX;
+ 
+ while(i < len1 && j < len2 && k < len3){
+  
+   int minimum = min(min(arr1[i], arr2[j]), arr3[k]);
+   int maximum = max(max(arr1[i], arr2[j]), arr3[k]);
+   
+   //if new difference less than previous difference, update difference, store
+   //resultants
+   if(fabs(max - min) < diff){ diff = max-min; res_i = i; res_j = j; res_k = k;}
+  
+   //increment minimum value
+   if(arr1[i] == min) ++i;
+   else if(arr2[j] == min) ++j;
+   else ++k;
+  
+ }
+ 
+ std::cout << res_i << " " << res_j << " " << res_k << "\n";
+ 
+}
+
+
+//Efficiently produces the closest triplet from 3 vectors
+
+void findClosest(vector<double> vec1, vector<double> vec2, vector<double> vec3){
+ 
+ //get size of each vector
+ int len1 = vec1.size(); int len2 = vec2.size(); int len3 = vec3.size();
+ 
+ int i = 0; int j = 0; int k = 0; int res_i, res_j, res_k;
+ int diff = INT_MAX;
+ 
+ while(i < len1 && j < len2 && k < len3){
+  
+   int minimum = min(min(vec1[i], vec2[j]), vec3[k]);
+   int maximum = max(max(vec1[i], vec2[j]), vec3[k]);
+   
+   //if new difference less than previous difference, update difference, store
+   //resultants
+   if(fabs(max - min) < diff){ diff = max-min; res_i = i; res_j = j; res_k = k;}
+  
+   //increment minimum value
+   if(vec1[i] == min) ++i;
+   else if(vec2[j] == min) ++j;
+   else ++k;
+  
+ }
+ 
+ std::cout << res_i << " " << res_j << " " << res_k << "\n";
+ 
+}
