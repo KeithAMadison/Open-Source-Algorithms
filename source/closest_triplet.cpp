@@ -21,68 +21,47 @@
  *
  */
  
+void findClosest(std::vector<T> vecOne, std::vector<T> vecTwo, std::vector<T> vecThree) {
 
+    std::vector<std::vector<T>> triples;
+    for(auto val : vecOne){
 
+        T first, second;
+        auto geq = std::lower_bound(vecTwo.begin(), vecTwo.end(), val);
 
-//Efficiently produces the closest triplet from 3 arrays
+        if(std::min(tstamp - *geq, tstamp - *(--geq)) == tstamp - *geq){
+            first = *geq;
+        } else {
+            first = *leq;
+        }
 
-void findClosest(int arr1[], int arr2[], int arr3[]){
- 
- //calculate size of each array
- int len1 = sizeof(arr1)/sizeof(arr1[0]);
- int len2 = sizeof(arr2)/sizeof(arr2[0]);
- int len3 = sizeof(arr3)/sizeof(arr3[0]);
- 
- int i = 0; int j = 0; int k = 0; int res_i, res_j, res_k;
- int diff = INT_MAX;
- 
- while(i < len1 && j < len2 && k < len3){
-  
-   int minimum = min(min(arr1[i], arr2[j]), arr3[k]);
-   int maximum = max(max(arr1[i], arr2[j]), arr3[k]);
-   
-   //if new difference less than previous difference, update difference, store
-   //resultants
-   if(fabs(max - min) < diff){ diff = max-min; res_i = i; res_j = j; res_k = k;}
-  
-   //increment minimum value
-   if(arr1[i] == min) ++i;
-   else if(arr2[j] == min) ++j;
-   else ++k;
-  
- }
- 
- std::cout << res_i << " " << res_j << " " << res_k << "\n";
- 
-}
+        geq = std::lower_bound(vecThree.begin(), vecThree.end(), val);
 
+        if(std::min(tstamp - *geq, tstamp - *(--geq)) == tstamp - *geq){
+            second = *geq;
+        } else {
+            second = *leq;
+        }
 
-//Efficiently produces the closest triplet from 3 vectors
+        triples.push_back({tstamp, first, second, std::max(tstamp,first,second) - std::min(tstamp,first,second)});
 
-void findClosest(vector<double> vec1, vector<double> vec2, vector<double> vec3){
- 
- //get size of each vector
- int len1 = vec1.size(); int len2 = vec2.size(); int len3 = vec3.size();
- 
- int i = 0; int j = 0; int k = 0; int res_i, res_j, res_k;
- int diff = INT_MAX;
- 
- while(i < len1 && j < len2 && k < len3){
-  
-   int minimum = min(min(vec1[i], vec2[j]), vec3[k]);
-   int maximum = max(max(vec1[i], vec2[j]), vec3[k]);
-   
-   //if new difference less than previous difference, update difference, store
-   //resultants
-   if(fabs(max - min) < diff){ diff = max-min; res_i = i; res_j = j; res_k = k;}
-  
-   //increment minimum value
-   if(vec1[i] == min) ++i;
-   else if(vec2[j] == min) ++j;
-   else ++k;
-  
- }
- 
- std::cout << res_i << " " << res_j << " " << res_k << "\n";
- 
+    }
+
+    std::sort(triples.begin(), triples.end(),
+              [&](std::vector<T>& A, std::vector<T>& B){
+                A[4] < B[4];
+    });
+    
+    std::unsorted_set<T> cache;
+    std::vector<std::vector<T>> sorted_triples;
+    for(auto triple : triples){
+        if(std::find(cache.begin(), cache.end(), triple[1]) == cache.end()\
+            && std::find(cache.begin(), cache.end(), triple[2]) == cache.end()){
+                sorted_triples.push_back(triple);
+                cache.insert(triple[1]); cache.insert(triple[2]);
+        }
+    }
+    
+    return sorted_triples;
+    
 }
